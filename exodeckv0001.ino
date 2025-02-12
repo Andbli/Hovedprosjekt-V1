@@ -2,10 +2,10 @@
 BleKeyboard bleKeyboard("ExoDeck V1", "AndreasBlindheim", 100); //Name, Manufacturer, Battery
 
 //Pins
-const int button1 = 2;
-const int button2; //= 1;
-const int button3; //= 2;
-const int button4; //= 3;
+const int b1 = 2;
+const int b2; //= 1;
+const int b3; //= 2;
+const int b4; //= 3;
 
 const int rotary1; //= 4;
 const int rotary2; //= 5;
@@ -36,10 +36,10 @@ void setup() {
   bleKeyboard.begin(); //Starts the bluetooth keyboard
 
   //pinmode
-  pinMode(button1, INPUT);
-  pinMode(button2, INPUT);
-  pinMode(button3, INPUT);
-  pinMode(button4, INPUT);
+  pinMode(b1, INPUT);
+  pinMode(b2, INPUT);
+  pinMode(b3, INPUT);
+  pinMode(b4, INPUT);
 
   pinMode(rotary1, INPUT);
   pinMode(rotary2, INPUT);
@@ -54,10 +54,10 @@ void loop() {
   if(bleKeyboard.isConnected()) {
 
     //Read all componenents
-    b1val = digitalRead(button1);
-    b2val = digitalRead(button2);
-    b3val = digitalRead(button3);
-    b4val = digitalRead(button4);
+    b1val = digitalRead(b1);
+    b2val = digitalRead(b2);
+    b3val = digitalRead(b3);
+    b4val = digitalRead(b4);
 
     if(b1val == 1 && millis() - b1last > buttonpressdebouce){ //Condition that check if the button is currectly pressed and that millis() - b1last is more than buttonpressdebounce.
       
