@@ -1,6 +1,6 @@
 # ExoDeck-V1
 
-** You must use esp32 board library at version 2.0.11! Newer versions is not compatible!
+** You must use esp32 board library at version 2.0.11! Newer versions is not compatible! **
 
 bleKeyboard.press(KEY_LEFT_CTRL);
 
