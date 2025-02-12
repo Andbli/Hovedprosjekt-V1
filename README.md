@@ -1,7 +1,5 @@
 # ExoDeck-V1
 
-Check out blekeyboard for the library, this is my private code and is not intended for any use beyond that.
-
 bleKeyboard.press(KEY_LEFT_CTRL);
 
 bleKeyboard.press(KEY_LEFT_SHIFT);
