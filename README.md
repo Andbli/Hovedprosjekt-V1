@@ -4,6 +4,9 @@
 
 Sjekk ut analog / digital multiplexer for å få minst mulig wires.
 
+
+## General Keys
+
 bleKeyboard.press(KEY_LEFT_CTRL);
 
 bleKeyboard.press(KEY_LEFT_SHIFT);
@@ -45,6 +48,41 @@ bleKeyboard.write(KEY_F11);
 bleKeyboard.write(KEY_F12);
 
 bleKeyboard.write(KEY_UP_ARROW);
+
+
+## Media Keys
+
+KEY_MEDIA_NEXT_TRACK
+
+KEY_MEDIA_PREVIOUS_TRACK
+
+KEY_MEDIA_STOP
+
+KEY_MEDIA_PLAY_PAUSE
+
+KEY_MEDIA_MUTE
+
+KEY_MEDIA_VOLUME_UP
+
+KEY_MEDIA_VOLUME_DOWN
+
+KEY_MEDIA_WWW_HOME
+
+KEY_MEDIA_LOCAL_MACHINE_BROWSER // Opens "My Computer" on Windows
+
+KEY_MEDIA_CALCULATOR
+
+KEY_MEDIA_WWW_BOOKMARKS
+
+KEY_MEDIA_WWW_SEARCH
+
+KEY_MEDIA_WWW_STOP
+
+KEY_MEDIA_WWW_BACK
+
+KEY_MEDIA_CONSUMER_CONTROL_CONFIGURATION // Media Selection
+
+KEY_MEDIA_EMAIL_READER
 
 bleKeyboard.write(KEY_DOWN_ARROW);
 
