@@ -1,4 +1,4 @@
-# ExoDeck-V1
+# Hovedprosjekt-V1
 
 ** You must use esp32 board library at version 2.0.11! Newer versions is not compatible! **
 
