@@ -14,12 +14,19 @@ Module 1 is the main module and includes:
 - USB C Connector ( 4 pin?)
 - Magnets & Connectors on the left side only!
 - Touch sensor on side to turn off?
+- Compartments with sand (Weight)
+- Magnets
 
 ## Module 2
 Module 2 is an extension module and includes:
 - 4-5 Buttons
 - Oled
 - Diffused leds on button press?
+- Compartments with sand (Weight)
+- Magnets
+
+## Module 3
+Move stuff here??
 
 
 ## Module 4
@@ -28,6 +35,12 @@ Module 4 is an external extra module that can work standalone aswell as connecte
 - Wemos D1 Mini
 - USB C Connector
 - Touch sensor??
+- Compartments with sand (Weight)
+- Magnets
+
+## Module 5
+Module 5 is a dummy module designed to end off the Exodeck and hide the last connector. Evt sette connectors andre veien slik du ikkje får sideproblemet
+- Magnets
 
 
 ## Connector pins:
