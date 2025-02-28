@@ -51,6 +51,8 @@ Module 4 is an external extra module that can work standalone aswell as connecte
 
 10: Button 4
 
+Note: Combine 2 and 2 buttons and use resistors and a analog read to save pins!
+
 
 ## General Keys
 
