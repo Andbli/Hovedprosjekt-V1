@@ -64,7 +64,7 @@ Module 5 is a dummy module designed to end off the Exodeck and hide the last con
 
 10: Button 4
 
-Note: Combine 2 and 2 buttons and use resistors and a analog read to save pins!
+Note: Combine 2 and 2 buttons and use resistors and a analog read to save pins, if needed!
 
 
 ## General Keys
