@@ -2,8 +2,6 @@
 
 ** You must use esp32 board library at version 2.0.11! Newer versions is not compatible! **
 
-Sjekk ut analog / digital multiplexer for å få minst mulig wires.
-
 
 
 ## Module 1
