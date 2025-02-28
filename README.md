@@ -28,7 +28,7 @@ Move stuff here??
 
 
 ## Module 4
-Module 4 is an external extra module that can work standalone aswell as connected.
+Module 4 is an external extra module that can work standalone aswell as connected. Use with Home Assistant
 - 5 buttons
 - Wemos D1 Mini
 - USB C Connector
