@@ -5,6 +5,53 @@
 Sjekk ut analog / digital multiplexer for å få minst mulig wires.
 
 
+
+## Module 1
+Module 1 is the main module and includes:
+- ESP 32
+- Slider
+- Potensiometer / Rotary Encoders
+- USB C Connector ( 4 pin?)
+- Magnets & Connectors on the left side only!
+- Touch sensor on side to turn off?
+
+## Module 2
+Module 2 is an extension module and includes:
+- 4-5 Buttons
+- Oled
+- Diffused leds on button press?
+
+
+## Module 4
+Module 4 is an external extra module that can work standalone aswell as connected.
+- 5 buttons
+- Wemos D1 Mini
+- USB C Connector
+- Touch sensor??
+
+
+## Connector pins:
+1: 3.3v
+
+2: 5v?
+
+3: GND
+
+4: SDA
+
+5: SCL
+
+6: Slider potensiometer Analog Read??
+
+7: Button 1
+
+8: Button 2
+
+9: Button 3
+
+10: Button 4
+
+
 ## General Keys
 
 bleKeyboard.press(KEY_LEFT_CTRL);
