@@ -1,5 +1,6 @@
 # Autohotkey Read Me
 
+## Shortcuts
 Left Ctrl + Right Ctrl + Alt + 1
 
 Left Ctrl + Right Ctrl + Alt + 2
