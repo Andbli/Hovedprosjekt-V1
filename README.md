@@ -21,10 +21,12 @@ Module 2 is an extension module and includes:
 - Oled
 - Diffused leds on button press?
 - Compartments with sand (Weight)
-- Magnets
+- Magnets & Connectors
 
 ## Module 3
 Move stuff here??
+- Magnets & Connectors
+- Compartments with sand (Weight)
 
 
 ## Module 4
@@ -34,7 +36,7 @@ Module 4 is an external extra module that can work standalone aswell as connecte
 - USB C Connector
 - Touch sensor??
 - Compartments with sand (Weight)
-- Magnets
+- Magnets & Connectors
 
 ## Module 5
 Module 5 is a dummy module designed to end off the Exodeck and hide the last connector. Evt sette connectors andre veien slik du ikkje får sideproblemet
