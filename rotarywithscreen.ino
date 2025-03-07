@@ -13,8 +13,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // --- Encoder Pin Definitions ---
 #define ENCODER1_A 18
 #define ENCODER1_B 19
-#define ENCODER2_A 2
-#define ENCODER2_B 4
+#define ENCODER2_A 5
+#define ENCODER2_B 23
+#define ENCODER3_A 16
+#define ENCODER3_B 17
 
 // --- Encoder Value Range ---
 #define MIN_VALUE 0
@@ -23,15 +25,12 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // --- Create Encoder Objects ---
 AiEsp32RotaryEncoder encoder1(ENCODER1_A, ENCODER1_B, -1, -1, 4);
 AiEsp32RotaryEncoder encoder2(ENCODER2_A, ENCODER2_B, -1, -1, 4);
+AiEsp32RotaryEncoder encoder3(ENCODER3_A, ENCODER3_B, -1, -1, 4);
 
 // --- Interrupt Service Routines ---
 void IRAM_ATTR handleEncoder1() { encoder1.readEncoder_ISR(); }
 void IRAM_ATTR handleEncoder2() { encoder2.readEncoder_ISR(); }
-
-// Global variables to hold the last read values and the active encoder
-int activeEncoder = 1;       // 1 = Encoder 1, 2 = Encoder 2
-int lastValue1 = MIN_VALUE;  // Last value for Encoder 1
-int lastValue2 = MIN_VALUE;  // Last value for Encoder 2
+void IRAM_ATTR handleEncoder3() { encoder3.readEncoder_ISR(); }
 
 void setup() {
   Serial.begin(115200);
@@ -42,77 +41,74 @@ void setup() {
   pinMode(ENCODER1_B, INPUT_PULLUP);
   pinMode(ENCODER2_A, INPUT_PULLUP);
   pinMode(ENCODER2_B, INPUT_PULLUP);
+  pinMode(ENCODER3_A, INPUT_PULLUP);
+  pinMode(ENCODER3_B, INPUT_PULLUP);
 
-  // Begin encoder operation and attach ISRs
+  // Begin and configure the encoders
   encoder1.begin();
   encoder2.begin();
+  encoder3.begin();
   encoder1.setup(handleEncoder1);
   encoder2.setup(handleEncoder2);
+  encoder3.setup(handleEncoder3);
 
-  // Set boundaries and acceleration
+  // Set boundaries and acceleration for each encoder
   encoder1.setBoundaries(MIN_VALUE, MAX_VALUE, true);
   encoder2.setBoundaries(MIN_VALUE, MAX_VALUE, true);
+  encoder3.setBoundaries(MIN_VALUE, MAX_VALUE, true);
   encoder1.setAcceleration(20);
   encoder2.setAcceleration(20);
+  encoder3.setAcceleration(20);
 
-  // Initialize OLED display
+  // Initialize the OLED display
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
   display.clearDisplay();
-
-  // Read initial encoder values
-  lastValue1 = encoder1.readEncoder();
-  lastValue2 = encoder2.readEncoder();
 }
 
 void loop() {
-  // Check for changes on Encoder 1 and update its value
-  if (encoder1.encoderChanged()) {
-    lastValue1 = encoder1.readEncoder();
-    activeEncoder = 1;
-  }
-  // Check for changes on Encoder 2 and update its value
-  if (encoder2.encoderChanged()) {
-    lastValue2 = encoder2.readEncoder();
-    activeEncoder = 2;
-  }
+  // Read current values from all three encoders
+  int value1 = encoder1.readEncoder();
+  int value2 = encoder2.readEncoder();
+  int value3 = encoder3.readEncoder();
 
-  // Determine which encoder is active and set the active value and label
-  int activeValue;
-  String encoderName;
-  if (activeEncoder == 1) {
-    activeValue = lastValue1;
-    encoderName = "Encoder 1";
-  } else {
-    activeValue = lastValue2;
-    encoderName = "Encoder 2";
-  }
-
-  // Map the encoder value to a progress bar width
-  int barWidth = map(activeValue, MIN_VALUE, MAX_VALUE, 0, SCREEN_WIDTH - 20);
-
-  // Clear the display and draw the active encoder info
+  // Clear display before drawing new content
   display.clearDisplay();
 
-  // Display the encoder label at the top
+  // Define vertical offsets for each encoder section
+  int offset1 = 0;   // Section 1: rows 0 - 20
+  int offset2 = 21;  // Section 2: rows 21 - 41
+  int offset3 = 42;  // Section 3: rows 42 - 63
+
+  // --- Draw Encoder 1 ---
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(35, 5);
-  display.print(encoderName);
+  display.setCursor(0, offset1);
+  display.print("Encoder 1: ");
+  display.print(value1);
+  int barWidth1 = map(value1, MIN_VALUE, MAX_VALUE, 0, SCREEN_WIDTH);
+  display.drawRect(0, offset1 + 10, SCREEN_WIDTH, 5, SSD1306_WHITE);
+  display.fillRect(0, offset1 + 10, barWidth1, 5, SSD1306_WHITE);
 
-  // Draw the progress bar outline
-  display.drawRect(10, 30, SCREEN_WIDTH - 20, 20, SSD1306_WHITE);
-  // Fill the progress bar according to the active value
-  display.fillRect(10, 30, barWidth, 20, SSD1306_WHITE);
+  // --- Draw Encoder 2 ---
+  display.setCursor(0, offset2);
+  display.print("Encoder 2: ");
+  display.print(value2);
+  int barWidth2 = map(value2, MIN_VALUE, MAX_VALUE, 0, SCREEN_WIDTH);
+  display.drawRect(0, offset2 + 10, SCREEN_WIDTH, 5, SSD1306_WHITE);
+  display.fillRect(0, offset2 + 10, barWidth2, 5, SSD1306_WHITE);
 
-  // Display the numeric value at the bottom
-  display.setTextSize(2);
-  display.setCursor(35, 55);
-  display.print(activeValue);
+  // --- Draw Encoder 3 ---
+  display.setCursor(0, offset3);
+  display.print("Encoder 3: ");
+  display.print(value3);
+  int barWidth3 = map(value3, MIN_VALUE, MAX_VALUE, 0, SCREEN_WIDTH);
+  display.drawRect(0, offset3 + 10, SCREEN_WIDTH, 5, SSD1306_WHITE);
+  display.fillRect(0, offset3 + 10, barWidth3, 5, SSD1306_WHITE);
 
+  // Refresh the display
   display.display();
 
-  // Debug print to Serial Monitor
-  Serial.printf("%s value: %d\n", encoderName.c_str(), activeValue);
-
-  delay(50); // Small delay to smooth the display updates
+  // Debug: Print encoder values to Serial Monitor
+  Serial.printf("Enc1: %d, Enc2: %d, Enc3: %d\n", value1, value2, value3);
+  delay(50); // Small delay to smooth display updates
 }
