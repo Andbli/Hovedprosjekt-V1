@@ -1,0 +1,51 @@
+#include <AiEsp32RotaryEncoder.h>
+
+// --- Define rotary encoder pins ---
+// Each encoder has two signal pins (A & B)
+#define ENCODER1_A 18
+#define ENCODER1_B 19
+#define ENCODER2_A 26
+#define ENCODER2_B 27
+
+// --- Set value limits for encoders ---
+#define MIN_VALUE 0   // Lowest value
+#define MAX_VALUE 100 // Highest value
+
+// --- Create rotary encoder objects ---
+// Arguments: (A pin, B pin, Button pin (-1 if not used), VCC pin (-1 if not used), Steps per notch)
+AiEsp32RotaryEncoder encoder1(ENCODER1_A, ENCODER1_B, -1, -1, 4);
+AiEsp32RotaryEncoder encoder2(ENCODER2_A, ENCODER2_B, -1, -1, 4);
+
+// --- Interrupt service routines (ISR) ---
+// These functions allow the ESP32 to read encoder changes efficiently
+void IRAM_ATTR readEncoder1() { encoder1.readEncoder_ISR(); }
+void IRAM_ATTR readEncoder2() { encoder2.readEncoder_ISR(); }
+
+void setup() {
+    Serial.begin(115200); // Start serial communication for debugging
+
+    // --- Initialize encoders ---
+    encoder1.begin(); 
+    encoder2.begin();
+    
+    // --- Attach ISR (interrupts) for smooth reading ---
+    encoder1.setup(readEncoder1); 
+    encoder2.setup(readEncoder2);
+
+    // --- Set value boundaries (0-100) ---
+    encoder1.setBoundaries(MIN_VALUE, MAX_VALUE, true);
+    encoder2.setBoundaries(MIN_VALUE, MAX_VALUE, true);
+}
+
+void loop() {
+    // Check and print values if encoders are turned
+    checkEncoder(encoder1, "Encoder 1");
+    checkEncoder(encoder2, "Encoder 2");
+}
+
+// --- Function to check and print encoder value if changed ---
+void checkEncoder(AiEsp32RotaryEncoder &encoder, const char *name) {
+    if (encoder.encoderChanged()) { // If the encoder value changed
+        Serial.printf("%s Value: %d\n", name, encoder.readEncoder()); // Print name and value
+    }
+}
