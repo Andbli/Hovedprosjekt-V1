@@ -1,35 +1,69 @@
-#include <RotaryEncoder.h>
+#include <Wire.h> 
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
-// Define rotary encoder pins
-#define ROTARY_ENCODER_CLK 18   // CLK pin
-#define ROTARY_ENCODER_DT 19    // DT pin
 
-// Create a RotaryEncoder object
-RotaryEncoder encoder(ROTARY_ENCODER_CLK, ROTARY_ENCODER_DT);
 
-// Initialize the value variable
-int rotval1 = 50;  // Initial value (start in the middle)
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define SCREEN_ADDRESS 0x3C  // Try 0x3D if 0x3C doesn't work
+#define OLED_RESET -1
+
+
+const int potpin = 4;  // Use ADC1 pin (32-39) to avoid Wi-Fi issues
+int potval = 0;
+float smoothedVal = 0;  // Smoothing filter
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 
 void setup() {
-  Serial.begin(115200);   // Initialize serial communication
-  encoder.begin();        // Initialize the encoder
+  Serial.begin(115200);
+  
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 initialization failed"));
+    for (;;);
+  }
+
+  pinMode(potpin, INPUT);
 }
 
 void loop() {
-  encoder.tick();  // Update the encoder state
+  potval = analogRead(potpin);  // Read raw potentiometer value
+  smoothedVal = (smoothedVal * 0.9) + (potval * 0.1); // Exponential smoothing
+  int percentage = map(smoothedVal, 0, 4095, 0, 101); // Scale to 0-100%
+  int barWidth = map(percentage, 0, 100, 0, SCREEN_WIDTH - 20); // Bar width mapping
 
-  // Get the current encoder position
-  int encoderValue = encoder.getPosition();
+  Serial.print("Potentiometer: ");
+  Serial.print(potval);
+  Serial.print(" -> Smoothed: ");
+  Serial.print(smoothedVal);
+  Serial.print(" -> Percentage: ");
+  Serial.println(percentage);
 
-  // Map the encoder position to the range 0-100
-  rotval1 = map(encoderValue, 0, 1000, 0, 100);  // Assuming the encoder has 1000 steps (adjust accordingly)
+  display.clearDisplay();
 
-  // Ensure the value stays within 0-100 range
-  rotval1 = constrain(rotval1, 0, 100);
+  // Display percentage text
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(35, 5);
+  display.print("Mode 1");
 
-  // Print the value to the Serial Monitor
-  Serial.print("Encoder Value: ");
-  Serial.println(rotval1);
+  // Draw bar outline
+  display.drawRect(10, 30, SCREEN_WIDTH - 20, 20, SSD1306_WHITE);
 
-  delay(50);  // Small delay to stabilize reading
+  // Draw filled bar
+  display.fillRect(10, 30, barWidth, 20, SSD1306_WHITE);
+
+
+  display.display();
+
+
+
+
+
+
+
+
 }
