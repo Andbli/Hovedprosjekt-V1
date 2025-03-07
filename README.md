@@ -2,7 +2,8 @@
 
 ** You must use esp32 board library at version 2.0.11! Newer versions is not compatible! **
 
-https://github.com/bonkmachines/ctrl-arduino for easier buttons and rotary encoders.
+Encoder Library (Paul Stoffregen) for rotary encoders.
+Bounce2 for buttons.
 
 
 
