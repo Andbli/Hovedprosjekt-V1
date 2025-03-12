@@ -18,7 +18,6 @@ Loop {
         if (RegExMatch(line, "VOLUME:(\d+)", match)) {
             newVolume := match1
             SoundSet, newVolume, Master  ; Instantly set volume
-            ToolTip, Volume: %newVolume%  ; Quick visual feedback (remove if unwanted)
         }
     }
     Sleep, 5  ; Ultra-low delay, ensures stability
