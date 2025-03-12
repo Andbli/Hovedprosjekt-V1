@@ -4,6 +4,11 @@
 #include <Adafruit_SSD1306.h> //Screen library
 #include <AiEsp32RotaryEncoder.h> //Library for easy rotary encoder management
 #include <ezButton.h> //Library for easy button management
+#include <BleKeyboard.h>
+
+BleKeyboard bleKeyboard("Exodeck", "AndreasBlindheim", 100); //Device Name, Device Manufacturer, Battery Percentage
+
+
 
 // --- Screen Setup ---
 #define SCREEN_WIDTH 128
@@ -41,6 +46,7 @@ void IRAM_ATTR handleEncoder3() { encoder3.readEncoder_ISR(); }
 
 void setup() {
   Serial.begin(115200);
+  bleKeyboard.begin();
 
 //Button DebouceTime
   button1.setDebounceTime(50); // set debounce time to 50 milliseconds
@@ -125,17 +131,18 @@ void loop() {
   // Refresh the display
   display.display();
 
-  // Debug: Print encoder values to Serial Monitor
-  Serial.printf("Enc1: %d, Enc2: %d, Enc3: %d\n", value1, value2, value3);
-
 
 
   if(button1.isPressed()){
     Serial.println("B1 Pressed");
+    bleKeyboard.press(KEY_LEFT_GUI);
+    bleKeyboard.press('l');
   }
 
   if(button1.isReleased()){
     Serial.println("B1 Released");
+    delay(100);
+    bleKeyboard.releaseAll();
   }
 
   if(button2.isPressed()){
