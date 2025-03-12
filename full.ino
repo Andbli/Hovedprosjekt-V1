@@ -12,18 +12,18 @@
 #define OLED_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-ezButton button1(32);  // creates ezButton object
-ezButton button2(33);  // create ezButton object
-ezButton button3(25);  // create ezButton object
+ezButton button1(13);  // creates ezButton object
+ezButton button2(14);  // create ezButton object
+ezButton button3(27);  // create ezButton object
 ezButton button4(26);  // create ezButton object
 
 // --- Rotary Encoders Pin Definitions ---
-#define ENCODER1_A 18
-#define ENCODER1_B 19
-#define ENCODER2_A 5
-#define ENCODER2_B 23
-#define ENCODER3_A 16
-#define ENCODER3_B 17
+#define ENCODER1_A 4
+#define ENCODER1_B 23
+#define ENCODER2_A 17
+#define ENCODER2_B 5
+#define ENCODER3_A 18
+#define ENCODER3_B 19
 
 // --- Rotary Encoder Value Range ---
 #define MIN_VALUE 0
