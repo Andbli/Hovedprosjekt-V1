@@ -22,6 +22,11 @@ ezButton button2(14);  // create ezButton object
 ezButton button3(27);  // create ezButton object
 ezButton button4(26);  // create ezButton object
 
+
+int privencodervalue1 = -1;
+int privencodervalue2 = -1;
+int privencodervalue3 = -1;
+
 // --- Rotary Encoders Pin Definitions ---
 #define ENCODER1_A 4
 #define ENCODER1_B 23
@@ -69,6 +74,9 @@ void setup() {
   encoder1.setup(handleEncoder1);
   encoder2.setup(handleEncoder2);
   encoder3.setup(handleEncoder3);
+
+  //Sets start value
+  encoder2.setEncoderValue(50);
 
   // Set boundaries and acceleration for each encoder
   encoder1.setBoundaries(MIN_VALUE, MAX_VALUE, true);
@@ -132,8 +140,15 @@ void loop() {
   display.display();
 
   //Sends the rotary encoder value over usb connection to autohotkey.
-  Serial.printf("VOLUME:%d\n", value1);
-
+ if(value1 != privencodervalue1){
+    Serial.printf("VOLUME:%d\n", value1);
+    privencodervalue1 = value1;
+  }
+ if(value2 != privencodervalue2){
+    Serial.printf("BRIGHTNESS:%d\n", value2);
+    privencodervalue2 = value2;
+  }
+ 
 
 
   if(button1.isPressed()){
