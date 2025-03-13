@@ -45,7 +45,7 @@ void IRAM_ATTR handleEncoder2() { encoder2.readEncoder_ISR(); }
 void IRAM_ATTR handleEncoder3() { encoder3.readEncoder_ISR(); }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   bleKeyboard.begin();
 
 //Button DebouceTime
