@@ -21,11 +21,13 @@ ezButton button1(13);  // creates ezButton object
 ezButton button2(14);  // create ezButton object
 ezButton button3(27);  // create ezButton object
 ezButton button4(26);  // create ezButton object
+ezButton brot3(16); //Create a ezButton object for rotary encoder 3.
 
 
 int privencodervalue1 = -1;
 int privencodervalue2 = -1;
 int privencodervalue3 = -1;
+int privval3 = 0;
 
 // --- Rotary Encoders Pin Definitions ---
 #define ENCODER1_A 4
@@ -58,6 +60,7 @@ void setup() {
   button2.setDebounceTime(50); // set debounce time to 50 milliseconds
   button3.setDebounceTime(50); // set debounce time to 50 milliseconds
   button4.setDebounceTime(50); // set debounce time to 50 milliseconds
+  brot3.setDebounceTime(50); // set debounce time to 50 milliseconds
 
   // PinModes
   pinMode(ENCODER1_A, INPUT_PULLUP);
@@ -81,10 +84,10 @@ void setup() {
   // Set boundaries and acceleration for each encoder
   encoder1.setBoundaries(MIN_VALUE, MAX_VALUE, true);
   encoder2.setBoundaries(MIN_VALUE, MAX_VALUE, true);
-  encoder3.setBoundaries(MIN_VALUE, MAX_VALUE, true);
+  encoder3.setBoundaries(-900000, 900000, true);
   encoder1.setAcceleration(20);
   encoder2.setAcceleration(20);
-  encoder3.setAcceleration(20);
+  encoder3.setAcceleration(0);
 
   // Initialize the OLED display
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
@@ -101,6 +104,7 @@ void loop() {
   button2.loop(); 
   button3.loop(); 
   button4.loop(); 
+  brot3.loop();
 
   // Clear display before drawing new content
   display.clearDisplay();
@@ -147,6 +151,29 @@ void loop() {
  if(value2 != privencodervalue2){
     Serial.printf("BRIGHTNESS:%d\n", value2);
     privencodervalue2 = value2;
+  }
+
+  if(value3 > privval3){
+    Serial.print("+");
+    bleKeyboard.write(KEY_RIGHT_ARROW);
+    privval3 = value3;
+  }
+
+  if(value3 < privval3){
+    Serial.print("-");
+    bleKeyboard.write(KEY_LEFT_ARROW);
+    privval3 = value3;
+  }
+
+  if(brot3.isPressed()){
+    Serial.println("Rotary Encoder 3 pressed!");
+    bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
+
+  }
+
+  if(brot3.isPressed()){
+    Serial.println("Rotary Encoder 3 released!");
+
   }
  
 
