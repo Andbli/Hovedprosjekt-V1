@@ -1,7 +1,6 @@
 #Persistent
 #NoEnv
 SetBatchLines, -1
-Process, Priority, , BelowNormal  ; Lower priority to avoid interference with games
 port := "\\.\COM4"  ; Ensure this is correct
 file := FileOpen(port, "r")
 if (!file) {
