@@ -21,21 +21,19 @@ ezButton button1(13);  // creates ezButton object
 ezButton button2(14);  // create ezButton object
 ezButton button3(27);  // create ezButton object
 ezButton button4(26);  // create ezButton object
-ezButton brot3(16); //Create a ezButton object for rotary encoder 3.
+ezButton brot1(16); //Create a ezButton object for rotary encoder 1.
+ezButton brot2(18); //Create a ezButton object for rotary encoder 2.
 
 
-int privencodervalue1 = -1;
-int privencodervalue2 = -1;
-int privencodervalue3 = -1;
-int privval3 = 0;
+int privval1 = 0; //Privval1 og value1 blir brukt til å styre rotary encoder mekansimen, slik vi kan sende en kommando når den snurrar en veg og en den andre vegen.
+int privval2 = 0; //Privval2 og value2 blir brukt til å styre rotary encoder mekansimen, slik vi kan sende en kommando når den snurrar en veg og en den andre vegen.
 
 // --- Rotary Encoders Pin Definitions ---
 #define ENCODER1_A 4
 #define ENCODER1_B 23
 #define ENCODER2_A 17
 #define ENCODER2_B 5
-#define ENCODER3_A 18
-#define ENCODER3_B 19
+
 
 // --- Rotary Encoder Value Range ---
 #define MIN_VALUE 0
@@ -44,12 +42,12 @@ int privval3 = 0;
 // --- Create Rotary Encoder Objects ---
 AiEsp32RotaryEncoder encoder1(ENCODER1_A, ENCODER1_B, -1, -1, 4);
 AiEsp32RotaryEncoder encoder2(ENCODER2_A, ENCODER2_B, -1, -1, 4);
-AiEsp32RotaryEncoder encoder3(ENCODER3_A, ENCODER3_B, -1, -1, 4);
+
 
 // --- Interrupt Service Routines ---
 void IRAM_ATTR handleEncoder1() { encoder1.readEncoder_ISR(); }
 void IRAM_ATTR handleEncoder2() { encoder2.readEncoder_ISR(); }
-void IRAM_ATTR handleEncoder3() { encoder3.readEncoder_ISR(); }
+
 
 void setup() {
   Serial.begin(9600);
@@ -60,34 +58,32 @@ void setup() {
   button2.setDebounceTime(50); // set debounce time to 50 milliseconds
   button3.setDebounceTime(50); // set debounce time to 50 milliseconds
   button4.setDebounceTime(50); // set debounce time to 50 milliseconds
-  brot3.setDebounceTime(50); // set debounce time to 50 milliseconds
+  brot1.setDebounceTime(50); // set debounce time to 50 milliseconds
+  brot2.setDebounceTime(50); // set debounce time to 50 milliseconds
+
 
   // PinModes
   pinMode(ENCODER1_A, INPUT_PULLUP);
   pinMode(ENCODER1_B, INPUT_PULLUP);
   pinMode(ENCODER2_A, INPUT_PULLUP);
   pinMode(ENCODER2_B, INPUT_PULLUP);
-  pinMode(ENCODER3_A, INPUT_PULLUP);
-  pinMode(ENCODER3_B, INPUT_PULLUP);
+
 
   // Begin and configure the encoders
   encoder1.begin();
   encoder2.begin();
-  encoder3.begin();
   encoder1.setup(handleEncoder1);
   encoder2.setup(handleEncoder2);
-  encoder3.setup(handleEncoder3);
 
   //Sets start value
   encoder2.setEncoderValue(50);
 
   // Set boundaries and acceleration for each encoder
-  encoder1.setBoundaries(MIN_VALUE, MAX_VALUE, true);
-  encoder2.setBoundaries(MIN_VALUE, MAX_VALUE, true);
-  encoder3.setBoundaries(-900000, 900000, true);
+  encoder1.setBoundaries(-900000, 900000, true);
+  encoder2.setBoundaries(-900000, 900000, true);
   encoder1.setAcceleration(20);
-  encoder2.setAcceleration(20);
-  encoder3.setAcceleration(0);
+  encoder2.setAcceleration(0);
+
 
   // Initialize the OLED display
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
@@ -98,21 +94,24 @@ void loop() {
   // Read current values from all three encoders
   int value1 = encoder1.readEncoder();
   int value2 = encoder2.readEncoder();
-  int value3 = encoder3.readEncoder();
 
   button1.loop(); // Start Read the button
   button2.loop(); 
   button3.loop(); 
   button4.loop(); 
-  brot3.loop();
+  brot1.loop();
+  brot2.loop();
 
+
+
+
+//------------------------------------------Display Logic-----------------------------------------------------
   // Clear display before drawing new content
   display.clearDisplay();
 
   // Define vertical offsets for each encoder section
   int offset1 = 0;   // Section 1: rows 0 - 20
   int offset2 = 21;  // Section 2: rows 21 - 41
-  int offset3 = 42;  // Section 3: rows 42 - 63
 
   // --- Draw Encoder 1 ---
   display.setTextSize(1);
@@ -132,52 +131,65 @@ void loop() {
   display.drawRect(0, offset2 + 10, SCREEN_WIDTH, 5, SSD1306_WHITE);
   display.fillRect(0, offset2 + 10, barWidth2, 5, SSD1306_WHITE);
 
-  // --- Draw Encoder 3 ---
-  display.setCursor(0, offset3);
-  display.print("Encoder 3: ");
-  display.print(value3);
-  int barWidth3 = map(value3, MIN_VALUE, MAX_VALUE, 0, SCREEN_WIDTH);
-  display.drawRect(0, offset3 + 10, SCREEN_WIDTH, 5, SSD1306_WHITE);
-  display.fillRect(0, offset3 + 10, barWidth3, 5, SSD1306_WHITE);
 
   // Refresh the display
   display.display();
 
-  //Sends the rotary encoder value over usb connection to autohotkey.
- if(value1 != privencodervalue1){
-    Serial.printf("VOLUME:%d\n", value1);
-    privencodervalue1 = value1;
-  }
- if(value2 != privencodervalue2){
-    Serial.printf("BRIGHTNESS:%d\n", value2);
-    privencodervalue2 = value2;
+
+
+//------------------------------------------Rotary Encoder 1-----------------------------------------------------
+  if(value1 > privval1){
+    Serial.print("Vol+");
+    bleKeyboard.write(KEY_MEDIA_VOLUME_UP);
+    privval1 = value1;
   }
 
-  if(value3 > privval3){
-    Serial.print("+");
+  if(value1 < privval1){
+    Serial.print("Vol-");
+    bleKeyboard.write(KEY_MEDIA_VOLUME_DOWN);
+    privval1 = value1;
+  }
+
+  if(brot1.isPressed()){
+    //Serial.println("Rotary Encoder 1 pressed!");
+    bleKeyboard.write(KEY_MEDIA_MUTE);
+
+  }
+
+  if(brot1.isReleased()){
+    //Serial.println("Rotary Encoder 1 released!");
+
+  }
+
+
+//------------------------------------------Rotary Encoder 2-----------------------------------------------------
+   if(value2 > privval2){
+    //Serial.print("Volume +");
     bleKeyboard.write(KEY_RIGHT_ARROW);
-    privval3 = value3;
+    privval2 = value2;
   }
 
-  if(value3 < privval3){
-    Serial.print("-");
+  if(value2 < privval2){
+    //Serial.print("Volume Down");
     bleKeyboard.write(KEY_LEFT_ARROW);
-    privval3 = value3;
+    privval2 = value2;
   }
-
-  if(brot3.isPressed()){
-    Serial.println("Rotary Encoder 3 pressed!");
+ 
+  if(brot2.isPressed()){
+    //Serial.println("Mute!");
     bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
 
   }
 
-  if(brot3.isPressed()){
-    Serial.println("Rotary Encoder 3 released!");
+  if(brot2.isReleased()){
+    //Serial.println("Rotary Encoder 2 released!");
 
   }
  
 
 
+//------------------------------------------Button 1-----------------------------------------------------
+ 
   if(button1.isPressed()){
     Serial.println("B1 Pressed");
     bleKeyboard.press(KEY_LEFT_GUI);
@@ -190,6 +202,8 @@ void loop() {
     bleKeyboard.releaseAll();
   }
 
+//------------------------------------------Button 2-----------------------------------------------------
+
   if(button2.isPressed()){
     Serial.println("B2 Pressed");
     bleKeyboard.write(KEY_MEDIA_VOLUME_UP);
@@ -199,6 +213,8 @@ void loop() {
     Serial.println("B2 Released");
   }
 
+//------------------------------------------Button 3-----------------------------------------------------
+
   if(button3.isPressed()){
     Serial.println("B3 Pressed");
     bleKeyboard.write(KEY_MEDIA_VOLUME_DOWN);
@@ -207,6 +223,8 @@ void loop() {
   if(button3.isReleased()){
     Serial.println("B3 Released");
   }
+
+//------------------------------------------Button 4-----------------------------------------------------
 
   if(button4.isPressed()){
     Serial.println("B4 Pressed");
