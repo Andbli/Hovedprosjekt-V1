@@ -2,7 +2,7 @@
 
 ** You must use esp32 board library at version 2.0.11! Newer versions is not compatible! **
 
-Encoder Library (Paul Stoffregen) for rotary encoders.
+
 ezButtons for buttons.
 
 
