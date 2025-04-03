@@ -7,67 +7,7 @@ ezButtons for buttons.
 
 
 
-## Module 1
-Module 1 is the main module and includes:
-- ESP 32
-- Slider
-- Potensiometer / Rotary Encoders
-- USB C Connector ( 4 pin?)
-- Magnets & Connectors on the left side only!
-- Touch sensor on side to turn off?
-- Compartments with sand (Weight)
-- Magnets
 
-## Module 2
-Module 2 is an extension module and includes:
-- 4-5 Buttons
-- Oled
-- Diffused leds on button press?
-- Compartments with sand (Weight)
-- Magnets & Connectors
-
-## Module 3
-Move stuff here??
-- Magnets & Connectors
-- Compartments with sand (Weight)
-
-
-## Module 4
-Module 4 is an external extra module that can work standalone aswell as connected. Use with Home Assistant
-- 5 buttons
-- Wemos D1 Mini
-- USB C Connector
-- Touch sensor??
-- Compartments with sand (Weight)
-- Magnets & Connectors
-
-## Module 5
-Module 5 is a dummy module designed to end off the Exodeck and hide the last connector. Evt sette connectors andre veien slik du ikkje får sideproblemet
-- Magnets
-
-
-## Connector pins:
-1: 3.3v
-
-2: 5v?
-
-3: GND
-
-4: SDA
-
-5: SCL
-
-6: Slider potensiometer Analog Read??
-
-7: Button 1
-
-8: Button 2
-
-9: Button 3
-
-10: Button 4
-
-Note: Combine 2 and 2 buttons and use resistors and a analog read to save pins, if needed!
 
 
 ## General Keys
