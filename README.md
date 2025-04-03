@@ -6,6 +6,7 @@
 ezButtons for buttons.
 
 
+Korleis få inn bilde:
 https://randomnerdtutorials.com/guide-for-oled-display-with-arduino/
 
 
