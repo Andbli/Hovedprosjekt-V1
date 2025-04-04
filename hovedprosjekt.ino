@@ -575,18 +575,18 @@ ezButton button1(13);  // creates ezButton object
 ezButton button2(14);  // create ezButton object
 ezButton button3(27);  // create ezButton object
 ezButton button4(26);  // create ezButton object
-ezButton brot1(16); //Create a ezButton object for rotary encoder 1.
-ezButton brot2(18); //Create a ezButton object for rotary encoder 2.
+ezButton brot1(4); //Create a ezButton object for rotary encoder 1.
+ezButton brot2(5); //Create a ezButton object for rotary encoder 2.
 
 
 int privval1 = 0; //Privval1 og value1 blir brukt til å styre rotary encoder mekansimen, slik vi kan sende en kommando når den snurrar en veg og en den andre vegen.
 int privval2 = 0; //Privval2 og value2 blir brukt til å styre rotary encoder mekansimen, slik vi kan sende en kommando når den snurrar en veg og en den andre vegen.
 
 // --- Rotary Encoders Pin Definitions ---
-#define ENCODER1_A 4
-#define ENCODER1_B 23
-#define ENCODER2_A 17
-#define ENCODER2_B 5
+#define ENCODER1_A 16
+#define ENCODER1_B 17
+#define ENCODER2_A 23
+#define ENCODER2_B 18
 
 
 // --- Rotary Encoder Value Range ---
@@ -756,7 +756,7 @@ void loop() {
  
 
 
-//------------------------------------------Button 1-----------------------------------------------------
+//------------------------------------------Button 1 Middle Lowest-----------------------------------------------------
  
   if(button1.isPressed()){
     Serial.println("B1 Pressed");
@@ -776,7 +776,7 @@ void loop() {
     lastimgupdate = millis();
   }
 
-//------------------------------------------Button 2-----------------------------------------------------
+//------------------------------------------Button 2 Low-----------------------------------------------------
 
   if(button2.isPressed()){
     Serial.println("B2 Pressed");
@@ -787,7 +787,7 @@ void loop() {
     Serial.println("B2 Released");
   }
 
-//------------------------------------------Button 3-----------------------------------------------------
+//------------------------------------------Button 3 High-----------------------------------------------------
 
   if(button3.isPressed()){
     Serial.println("B3 Pressed");
@@ -798,7 +798,7 @@ void loop() {
     Serial.println("B3 Released");
   }
 
-//------------------------------------------Button 4-----------------------------------------------------
+//------------------------------------------Button 4 NOT OPERATIONAL-----------------------------------------------------
 
   if(button4.isPressed()){
     Serial.println("B4 Pressed");
