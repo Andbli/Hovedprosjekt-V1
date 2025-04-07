@@ -780,7 +780,7 @@ void loop() {
 
   if(button2.isPressed()){
     Serial.println("B2 Pressed");
-    bleKeyboard.write(KEY_MEDIA_VOLUME_UP);
+    bleKeyboard.write(KEY_MEDIA_PREVIOUS_TRACK);
   }
 
   if(button2.isReleased()){
@@ -791,7 +791,7 @@ void loop() {
 
   if(button3.isPressed()){
     Serial.println("B3 Pressed");
-    bleKeyboard.write(KEY_MEDIA_VOLUME_DOWN);
+    bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
   }
 
   if(button3.isReleased()){
